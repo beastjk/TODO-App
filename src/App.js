@@ -1,31 +1,51 @@
-import React, {useState, initialState} from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button} from 'reactstrap';
+import React, { useState, useEffect} from 'react';
+import { Button, FormControl, InputLabel, Input } from '@material-ui/core';
+import Todo from './Todo.js'
 import './App.css';
+import db from './firebase'
+import firebase from 'firebase'
 
 function App() {
   //declared a state and function to change a state for this component
-  const [todos, setTodos] = useState(['Take a dog for a walk', 'Take the rubbish out', 'I want to play pubg today']);
+  const [todos, setTodos] = useState([]);
   const [input, setInput ] = useState('')
 
-  console.log('Input is : ', input);
+  useEffect(() => {
+    db.collection('todos').orderBy('timestamp', 'desc').onSnapshot(snapshot =>{
+      setTodos(snapshot.docs.map(doc => doc.data().todo))
+    })
+  }, [input])
 
   const addTodo = (event) =>{
     //this will fire off when we click our todo button
-    setTodos([...todos, ])
+    db.collection('todos').add({
+      todo: input,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
 
+
+
+    setTodos([...todos, input])
+    event.preventDefault()
+    setInput('')
   }
 
   return (
     <div className="App">
         <h1>Hello Guys!</h1>
-      <input type="text" style={{ height: "40px" }} className = 'mb-5' value = {input} onChange = {event => setInput(event.target.value)}/>
-      <Button color="primary" onClick={addTodo}>Add Todo</Button>
 
+       <form action="">
+
+        <FormControl>
+          <InputLabel>✔️ Write a Todo</InputLabel>
+          <Input value={input} onChange={event => setInput(event.target.value)}/>
+        </FormControl>
+        <Button disabled={!input} variant="contained" color="primary" onClick = {addTodo} type = "submit">Primary</Button>
+       </form>  
       <ul>
-          {todos.map(todo => {
-            return <li>{todo}</li>
-          })}
+          {todos.map(todo => (
+              <Todo text = {todo}/>
+          ))}
       </ul>
 
     </div>
