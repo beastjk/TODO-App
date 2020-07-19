@@ -26,6 +26,9 @@ function App() {
     // setTodos([...todos, input])
     event.preventDefault()
     setInput('')
+
+    
+
   }
 
   return (
@@ -33,13 +36,13 @@ function App() {
         <h1>Hello Guys!</h1>
 
        <form action="">
+          <FormControl className="mb-5">
+            <InputLabel>✔️ Write a Todo</InputLabel>
+            <Input value={input} onChange={event => setInput(event.target.value)}/>
+          </FormControl>
+        <Button disabled={!input} variant="contained" color="primary" onClick= {addTodo}  type = "submit" id = "newBg">ADD TODO</Button>
+       </form>
 
-        <FormControl>
-          <InputLabel>✔️ Write a Todo</InputLabel>
-          <Input value={input} onChange={event => setInput(event.target.value)}/>
-        </FormControl>
-        <Button disabled={!input} variant="contained" color="primary" onClick = {addTodo} type = "submit">ADD TODO</Button>
-       </form>  
       <ul className = "todo__unorderedlist">
           {todos.map(todo => (
               <Todo text = {todo}/>
