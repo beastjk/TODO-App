@@ -1,3 +1,15 @@
 .todo__list{
     text-align: center;
+    justify-content: center;
+    left: 40% ;
+    top: 50%;
+    /* display: block */
 }
+
+.todo__item{
+    border-radius: 50px;
+}
+
+/* .todo__itemText{
+    text-align: center;
+} */

@@ -12,7 +12,7 @@ function App() {
 
   useEffect(() => {
     db.collection('todos').orderBy('timestamp', 'desc').onSnapshot(snapshot =>{
-      setTodos(snapshot.docs.map(doc => doc.data().todo))
+      setTodos(snapshot.docs.map(doc => ({id: doc.id, todo: doc.data().todo})))
     })
   }, [input])
 
@@ -23,9 +23,7 @@ function App() {
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     })
 
-
-
-    setTodos([...todos, input])
+    // setTodos([...todos, input])
     event.preventDefault()
     setInput('')
   }
@@ -40,9 +38,9 @@ function App() {
           <InputLabel>✔️ Write a Todo</InputLabel>
           <Input value={input} onChange={event => setInput(event.target.value)}/>
         </FormControl>
-        <Button disabled={!input} variant="contained" color="primary" onClick = {addTodo} type = "submit">Primary</Button>
+        <Button disabled={!input} variant="contained" color="primary" onClick = {addTodo} type = "submit">ADD TODO</Button>
        </form>  
-      <ul>
+      <ul className = "todo__unorderedlist">
           {todos.map(todo => (
               <Todo text = {todo}/>
           ))}
